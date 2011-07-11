@@ -37,14 +37,19 @@ list.
 
 ## Use it
 
-  %> git clone git://github.com/patrickdanger/story_credits.git
-  %> cd story_credits
-  %> coffee server.coffee
+Check it out:
 
-or (if you prefer)
+	%> git clone git://github.com/patrickdanger/story_credits.git
+	%> cd story_credits
+	
+Start the server:
 
-  %> node server.js
+	%> coffee server.coffee
+
+or (if you prefer):
+
+	%> node server.js
 
 Then point your browser at:
 
-  http://localhost:3001/
+	http://localhost:3001/
