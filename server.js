@@ -1,9 +1,9 @@
 (function() {
-  var app, express, http, svrport;
+  var app, express, http, srvrport;
   http = require('http');
   express = require('express');
   app = module.exports = express.createServer();
-  svrport = 3001;
+  srvrport = 3001;
   app.configure(function() {
     app.set('view options', {
       layout: false
@@ -21,6 +21,6 @@
   app.get('/', function(req, res) {
     return res.render('index');
   });
-  app.listen(svrport);
+  app.listen(srvrport);
   console.log("Express server up on port " + srvrport);
 }).call(this);

@@ -4,7 +4,7 @@ express   = require 'express'
 app       = module.exports = express.createServer()
 
 # config
-svrport	  = 3001
+srvrport	  = 3001
 
 app.configure ->
 	app.set 'view options', layout: false
@@ -23,5 +23,5 @@ app.get '/', (req, res) ->
  	res.render 'index'
 
 
-app.listen svrport
+app.listen srvrport
 console.log "Express server up on port #{srvrport}"
