@@ -1,0 +1,104 @@
+!!! 5
+html(lang = "en")
+	head
+		title hello
+		link(rel = "stylesheet", href="/stylesheets/fonts.css")
+		link(rel = "stylesheet", href="/stylesheets/app.css")
+		script(src = "http://code.jquery.com/jquery-1.6.2.min.js")
+		// script(src = "/socket.io/socket.io.js")
+
+	body
+		section#stage
+			div.bullpen
+				h1 story credits
+
+		#shim
+		section#focus
+			#frame
+				img#avatar
+
+			hgroup
+				h1: span.dyn
+				h2: span.dyn
+				h3: span.dyn
+
+		:coffeescript
+			$.storify = auModel: {}, cIndex: null, cCount: null
+			$.ajax
+				url: 		"/json/notw.json"
+				dataType: 	"json"
+				success: 	(data, status) =>
+								console.log status
+								for key, element of data.elements
+									insertAuthor element.author.username, 
+										refCount: 	1
+										seen:		false
+										name: 		element.author.name
+										avatar: 	element.author.avatar or element.favicon
+										ref:    	element
+								
+								$.storify.carousel 			= $ ".bullpen img"
+								$.storify.cCount 			= $.storify.carousel.length  
+								$.storify.cIndex 			= $.storify.cCount - 1
+
+								$(".bullpen h1")
+									.animate({bottom: "0px", opacity: 1}, {queue: true, duration: 1000, easing: "swing"})
+
+								$(img)
+									.delay(1000 + (index * 100))
+									.animate({opacity: 1}, {queue: true, duration: 50, easing: "linear"})
+									.animate({opacity: 0.25}, {queue: true, duration: 225, easing: "swing"}) for img, index in $("#stage .bullpen img")
+
+								$(bar)
+									.animate({
+										top: $.storify.carousel.eq(index).position().top + 21
+										left: $.storify.carousel.eq(index).position().left + 8
+									}, {duration: 0})
+									.delay(1000 + (index * 100) + $.storify.cCount * 100)
+									.animate({
+										opacity: 1, 
+										height: $.storify.carousel.eq(index).data('ref').refCount + 'px'
+									}, {queue: true, duration: 100, easing: "swing"}) for bar, index in $("#stage .bullpen .bar")
+									
+
+				error:		(jqXHR, status, error) =>
+								console.log status
+								alert error
+
+			insertAuthor = (key, au) ->
+				if not $.storify.auModel[key] 
+					$.storify.auModel[key] = au
+					$(".bullpen").append $("<img class='avatar' src='#{au.avatar}' title='#{au.name}'/>").data("ref", au)
+					$(".bullpen").append $("<div class='bar'>&nbsp;</div>")
+				else
+					$.storify.auModel[key].refCount++
+			
+			advanceCredits = ->
+				return unless $.storify.carousel
+				next = ($.storify.cIndex + 1) % $.storify.cCount
+				blitCredit next
+
+			retreatCredits = ->
+				return unless $.storify.carousel
+				next = ($.storify.cIndex + ($.storify.cCount - 1)) % $.storify.cCount
+				blitCredit next
+
+			blitCredit = (index) ->
+				$.storify.carousel.eq($.storify.cIndex).animate({opacity: 0.25})
+				$.storify.carousel.eq(index).addClass('active').animate({opacity: 1}, {duration: 50})
+
+				au = $.storify.carousel.eq(index).data("ref")
+				$("#focus").attr 'class', au.ref.elementClass
+				$("#avatar").attr "src", au.avatar
+				$("#focus hgroup h1 .dyn").empty().append "#{au.name}"
+				$("#focus hgroup h2 .dyn").empty().append "by way of #{au.ref.source}"
+				$("#focus hgroup h3 .dyn").empty().append "#{au.refCount} #{ if au.refCount == 1 then 'piece' else 'pieces' }"
+				$("#focus article p").empty().append "#{au.ref.description or ''}"
+
+				$.storify.cIndex = index
+
+			$(document).bind "keyup", (e) ->
+				switch e.keyCode
+					when 37 then retreatCredits()
+					when 39 then advanceCredits()
+					else return
