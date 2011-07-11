@@ -4,6 +4,9 @@ The idea behind this concept is to promote the people behind each
 story, beyond the editor who compiles the disparate pieces into 
 a linear narrative.
 
+The effect of seeing how many people participated in a great narrative 
+is adds to the already persuasive argument for Storify's impact.
+
 The bullpen, the little widget at the bottom which begins the interaction 
 with the credits screen, fills up with boxes representing the individual
 sources that were brought together to construct the story.  By building
@@ -17,7 +20,7 @@ to the story as a whole.
 
 This is a bit of a toy and I just wanted to flesh the concept out enough
 to show what the impact of a credits screen could be, especially for 
-larger stories with lots of sources or even for smaller stories to which
+larger stories with lots of sources or even for smaller stories for which
 several key sources play an outsized role.
 
 For now, you can use the array keys (left and right) and cycle through
